@@ -1,0 +1,99 @@
+
+'use client';
+
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Separator } from '@/components/ui/separator';
+import { useActionState, useEffect, useRef } from 'react';
+import { useFormStatus } from 'react-dom';
+import { subscribeToNewsletter } from '@/app/actions';
+import { useToast } from '@/hooks/use-toast';
+import { Loader2 } from 'lucide-react';
+import Image from 'next/image';
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <Button type="submit" disabled={pending}>
+      {pending ? <Loader2 className="animate-spin" /> : "S'inscrire"}
+    </Button>
+  );
+}
+
+export default function Footer() {
+  const [state, formAction] = useActionState(subscribeToNewsletter, { message: '' });
+  const { toast } = useToast();
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    if (state.message) {
+      toast({
+        title: state.error ? 'Erreur' : 'Succès !',
+        description: state.message,
+        variant: state.error ? 'destructive' : 'default',
+      });
+      if (!state.error) {
+        formRef.current?.reset();
+      }
+    }
+  }, [state, toast]);
+
+  return (
+    <footer className="bg-secondary text-secondary-foreground border-t">
+      <div className="container mx-auto px-4 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="space-y-4">
+            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Collections</h3>
+            <ul className="space-y-2">
+              <li><Link href="/shop" className="hover:text-primary transition-colors">Tous les produits</Link></li>
+            </ul>
+          </div>
+          <div className="space-y-4">
+            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Support</h3>
+            <ul className="space-y-2">
+              <li><Link href="/about" className="hover:text-primary transition-colors">À Propos</Link></li>
+              <li><Link href="/contact" className="hover:text-primary transition-colors">Contact</Link></li>
+              <li><Link href="/shipping" className="hover:text-primary transition-colors">Politique de retour</Link></li>
+              <li><Link href="/faq" className="hover:text-primary transition-colors">FAQ</Link></li>
+            </ul>
+          </div>
+          <div className="space-y-4">
+            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Légal</h3>
+            <ul className="space-y-2">
+              <li><Link href="/terms" className="hover:text-primary transition-colors">Conditions Générales</Link></li>
+              <li><Link href="/privacy" className="hover:text-primary transition-colors">Politique de Confidentialité</Link></li>
+              <li><Link href="/mentions-legales" className="hover:text-primary transition-colors">Mentions Légales</Link></li>
+            </ul>
+          </div>
+          <div className="space-y-4">
+            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Newsletter</h3>
+            <p className="text-sm">Reçois les lancements et sélections olfactives (sans promos).</p>
+            <form ref={formRef} action={formAction} className="flex gap-2">
+              <Input
+                type="email"
+                name="email"
+                placeholder="Votre email"
+                className="bg-background"
+                required
+              />
+              <SubmitButton />
+            </form>
+          </div>
+        </div>
+        <Separator className="my-8" />
+        <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <div className="flex items-center gap-4">
+                 <Link href="/">
+                    <span className="font-bold text-lg font-headline">DubaiNegoce</span>
+                </Link>
+                <a href="https://fr.trustpilot.com/review/dubainegoce.fr" target="_blank" rel="noopener noreferrer">
+                    <Image src="https://res.cloudinary.com/dhjwimevi/image/upload/v1766250269/logo-white_x4wl9x.svg" alt="Trustpilot" width={100} height={25} style={{ height: 'auto' }} />
+                </a>
+            </div>
+          <p className="text-sm text-muted-foreground">&copy; {new Date().getFullYear()} DubaiNegoce. Tous droits réservés.</p>
+        </div>
+      </div>
+    </footer>
+  );
+}
