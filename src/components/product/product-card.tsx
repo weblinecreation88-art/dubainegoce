@@ -11,7 +11,15 @@ interface ProductCardProps {
     product: Product;
 }
 
+function getStockBadge(stock: number): { label: string; className: string } | null {
+    if (stock <= 0) return { label: 'Rupture de stock', className: 'bg-red-500 text-white' };
+    if (stock <= 3) return { label: `Plus que ${stock} en stock`, className: 'bg-red-500 text-white' };
+    if (stock <= 7) return { label: 'Stock limité', className: 'bg-orange-500 text-white' };
+    return null;
+}
+
 export function ProductCard({ product }: ProductCardProps) {
+    const stockBadge = getStockBadge(product.stock);
 
     return (
         <Card className="flex flex-col h-full overflow-hidden transition-shadow duration-300 hover:shadow-lg group">
@@ -24,9 +32,14 @@ export function ProductCard({ product }: ProductCardProps) {
                             sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
                             className="object-cover transition-transform duration-300 group-hover:scale-105"
                         />
-                        <div className="absolute top-2 left-2 flex flex-col gap-2">
+                        <div className="absolute top-2 left-2 flex flex-col gap-1.5">
                             {product.isBestseller && <Badge>Best-seller</Badge>}
                             {product.isNew && <Badge variant="secondary">Nouveau</Badge>}
+                            {stockBadge && (
+                                <span className={`text-[9px] font-semibold px-2 py-0.5 rounded ${stockBadge.className}`}>
+                                    {stockBadge.label}
+                                </span>
+                            )}
                         </div>
                     </div>
                 </CardHeader>
@@ -35,6 +48,9 @@ export function ProductCard({ product }: ProductCardProps) {
                         {product.name}
                     </CardTitle>
                     <CardDescription className="text-sm mt-1">{product.brand.name}</CardDescription>
+                    {product.volumeMl > 0 && (
+                        <p className="text-xs text-muted-foreground mt-1">{product.volumeMl}ml</p>
+                    )}
                 </CardContent>
             </Link>
             <CardFooter className="p-4 pt-0 flex flex-col items-start gap-4">

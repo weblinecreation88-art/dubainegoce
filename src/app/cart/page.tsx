@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Trash2, ShoppingBag, Loader2, TicketPercent } from 'lucide-react';
+import { Trash2, ShoppingBag, Loader2, TicketPercent, Lock, ShieldCheck } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { useUser, useFirestore } from '@/firebase';
 import { useRouter } from 'next/navigation';
@@ -272,11 +272,22 @@ export default function CartPage() {
                   <span>{totalAmount.toFixed(2)} €</span>
                 </div>
               </CardContent>
-              <CardFooter>
+              <CardFooter className="flex-col gap-3">
                 <Button className="w-full" size="lg" onClick={handleCheckout} disabled={isCheckingOut || cart.length === 0}>
                   {isCheckingOut ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                   {user ? 'Passer la commande' : 'Se connecter pour commander'}
+                  {user ? (isCheckingOut ? 'Redirection...' : 'Passer la commande →') : 'Se connecter pour commander'}
                 </Button>
+                <div className="w-full flex items-center justify-center gap-2 text-muted-foreground">
+                  <Lock className="h-3 w-3" />
+                  <span className="text-[10px] uppercase tracking-wider">Paiement 100% sécurisé SSL</span>
+                </div>
+                <div className="w-full flex items-center justify-center gap-4">
+                  <span className="text-[10px] text-muted-foreground flex items-center gap-1">
+                    <ShieldCheck className="h-3 w-3 text-primary" /> Stripe
+                  </span>
+                  <span className="text-[10px] text-muted-foreground">Visa / Mastercard</span>
+                  <span className="text-[10px] text-muted-foreground">PayPal</span>
+                </div>
               </CardFooter>
             </Card>
           </div>

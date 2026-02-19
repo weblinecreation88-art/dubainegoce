@@ -11,6 +11,7 @@ import { AnnouncementBar } from '@/components/layout/announcement-bar';
 import { FirebaseClientProvider } from '@/firebase';
 import { FaqChatbot } from '@/components/faq-chatbot';
 import { CookieConsent } from '@/components/cookie-consent';
+import { ExitIntentPopup } from '@/components/exit-intent-popup';
 import Script from 'next/script';
 import { ShieldCheck, Rocket, Lock, Phone } from 'lucide-react';
 
@@ -163,6 +164,7 @@ export default function RootLayout({
               <Toaster />
               <FaqChatbot />
               <CookieConsent />
+              <ExitIntentPopup />
             </CartProvider>
           </FirebaseClientProvider>
         </ThemeProvider>

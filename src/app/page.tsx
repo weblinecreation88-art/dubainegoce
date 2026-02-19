@@ -4,7 +4,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles, Star, ShieldCheck, Truck } from "lucide-react";
 import { getFragranceFamilies, getNewArrivals, getProducts } from "@/lib/data";
 import { ProductCard } from "@/components/product/product-card";
 import { SocialFollowSection } from "@/components/layout/social-follow-section";
@@ -19,6 +19,7 @@ import { ReassuranceSection } from "@/components/layout/reassurance-section";
 import React, { useState, useEffect } from "react";
 import { AnimatePresence, motion } from 'framer-motion';
 import { PerfumeFinderCta } from "@/components/perfume-finder-cta";
+import { CustomerReviewsSection } from "@/components/customer-reviews-section";
 
 export default function Home() {
   const fragranceFamilies = getFragranceFamilies();
@@ -90,6 +91,28 @@ export default function Home() {
                         <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                         </Link>
                     </Button>
+
+                    {/* Trust badges */}
+                    <div className="flex flex-wrap items-center gap-4 mt-6">
+                      <div className="flex items-center gap-1.5 text-muted-foreground text-sm">
+                        <div className="flex">
+                          {[...Array(5)].map((_, i) => (
+                            <Star key={i} className="h-3.5 w-3.5 fill-primary text-primary" />
+                          ))}
+                        </div>
+                        <span>4.9/5 · 150+ avis</span>
+                      </div>
+                      <span className="text-muted-foreground/30 hidden sm:block">|</span>
+                      <div className="flex items-center gap-1.5 text-muted-foreground text-sm">
+                        <ShieldCheck className="h-4 w-4 text-primary" />
+                        <span>100% Authentique</span>
+                      </div>
+                      <span className="text-muted-foreground/30 hidden sm:block">|</span>
+                      <div className="flex items-center gap-1.5 text-muted-foreground text-sm">
+                        <Truck className="h-4 w-4 text-primary" />
+                        <span>Livraison 48h</span>
+                      </div>
+                    </div>
                 </div>
 
                 <div className="relative flex items-center justify-center h-full">
@@ -335,6 +358,9 @@ export default function Home() {
           </div>
         </section>
       )}
+
+      {/* Customer Reviews Section */}
+      <CustomerReviewsSection />
 
       <div className="my-16 container mx-auto px-4">
           <PerfumeFinderCta />

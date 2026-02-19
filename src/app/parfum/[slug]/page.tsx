@@ -12,6 +12,8 @@ import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { ProductImage } from '@/components/product/product-image';
 import { PerfumeFinderCta } from '@/components/perfume-finder-cta';
+import { ProductPageClient } from './product-page-client';
+import { RotateCcw } from 'lucide-react';
 
 type Props = {
   params: { slug: string };
@@ -105,24 +107,32 @@ export default function ProductPage({ params }: Props) {
              {product.volumeMl > 0 && <span className="text-sm text-muted-foreground">/ {product.volumeMl}ml</span>}
           </div>
 
+          {/* Stock urgency */}
+          {product.stock > 0 && product.stock <= 7 && (
+            <div className={`text-sm font-medium px-3 py-2 rounded border ${product.stock <= 3 ? 'bg-red-50 text-red-600 border-red-200 dark:bg-red-900/20 dark:text-red-400' : 'bg-orange-50 text-orange-600 border-orange-200 dark:bg-orange-900/20 dark:text-orange-400'}`}>
+              {product.stock <= 3 ? `⚠️ Plus que ${product.stock} en stock !` : '⏳ Stock limité — commandez vite'}
+            </div>
+          )}
+
+          {/* Shipping countdown */}
+          <ProductPageClient />
+
           <AddToCartButton product={product} size="lg" className="w-full">
-            Ajouter au panier
+            Ajouter au panier — {product.price.toFixed(2)} €
           </AddToCartButton>
 
-          <div className="border rounded-lg p-4 space-y-4">
-            <div className="flex items-center gap-4">
-                <Truck className="h-6 w-6 text-primary" />
-                <div>
-                    <p className="font-semibold">Livraison Rapide</p>
-                    <p className="text-sm text-muted-foreground">Expédié en 48h, livraison Colissimo ou Mondial Relay.</p>
-                </div>
+          <div className="grid grid-cols-3 gap-3">
+            <div className="text-center border rounded-lg p-3 hover:border-primary transition-colors">
+              <Truck className="h-5 w-5 mx-auto mb-1 text-primary" />
+              <p className="text-[10px] text-muted-foreground leading-tight">Livraison<br />48h</p>
             </div>
-             <div className="flex items-center gap-4">
-                <ShieldCheck className="h-6 w-6 text-primary" />
-                <div>
-                    <p className="font-semibold">100% Authentique</p>
-                    <p className="text-sm text-muted-foreground">Produits importés directement de Dubaï.</p>
-                </div>
+            <div className="text-center border rounded-lg p-3 hover:border-primary transition-colors">
+              <ShieldCheck className="h-5 w-5 mx-auto mb-1 text-primary" />
+              <p className="text-[10px] text-muted-foreground leading-tight">100%<br />Authentique</p>
+            </div>
+            <div className="text-center border rounded-lg p-3 hover:border-primary transition-colors">
+              <RotateCcw className="h-5 w-5 mx-auto mb-1 text-primary" />
+              <p className="text-[10px] text-muted-foreground leading-tight">Retour<br />14 jours</p>
             </div>
           </div>
         </div>
